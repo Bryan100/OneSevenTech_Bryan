@@ -20,8 +20,7 @@ public class SignUpPage {
 
 		WebElement emailField = driver.findElement(By.xpath("//input[@id='email']"));
 
-		emailField.sendKeys(email);
-				
+		emailField.sendKeys(email);			
 	}
 
 	public void fillUsernameField(String username) {
@@ -50,15 +49,13 @@ public class SignUpPage {
 		hideButton.click();
 	}
 	
-	public void clicAtSignUpButton() {
+	public void clicAtSignUpButton() throws InterruptedException {
 		
 		WebElement signUpButton = driver.findElement(By.xpath("//button[contains(@id,'create-account')]"));
 		
 		signUpButton.click();
 			    
-	    driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(2));
-
-	    
+		Thread.sleep(3000);	    
 	}
 	
 

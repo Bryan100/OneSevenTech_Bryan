@@ -14,6 +14,9 @@ public class OutlookMainPage {
 
 	public void clicAtIniciarSesion() {
 		
+		WebElement loginButton = driver.findElement(By.xpath("(//a[text()='Iniciar sesión'])[2]"));
+		
+		loginButton.click();
 	}
 	
 

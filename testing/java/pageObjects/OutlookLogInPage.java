@@ -1,6 +1,8 @@
 package pageObjects;
 
+import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
 
 public class OutlookLogInPage {
 
@@ -12,6 +14,9 @@ public class OutlookLogInPage {
 
 	public void fillEmailPhoneField (String email) {
 		
+		WebElement emailField = driver.findElement(By.xpath("//input[@id='i0116']"));
+
+		emailField.sendKeys(email);	
 			
 	}
 	
@@ -23,6 +28,16 @@ public class OutlookLogInPage {
 	public void clicAtNextButton() {
 		
 	}
-	
+
+	public void clicSignInButton() {
+		
+		
+	}
+
+	public void clicNoButton() {
+		
+		
+	}
+
 	
 }

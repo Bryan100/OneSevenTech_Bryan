@@ -1,5 +1,9 @@
 package pageObjects;
 
+import java.time.Duration;
+import java.util.Iterator;
+import java.util.Set;
+
 import org.junit.Before;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
@@ -61,5 +65,22 @@ public class PageObject {
 	}
 
 
+	protected void switchTotheSecondtab() {
+	
+		Set<String> idVentanas = driver.getWindowHandles();
+
+		Iterator<String> iterador = idVentanas.iterator();
+
+		iterador.next(); // Foco 1ra Pestaña
+		
+		driver.switchTo().window(iterador.next()); // Foco 2nd tab
+
+	}
+	
+	protected void executeImplicitWait() {
+		
+	    driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(30));
+		
+	}
 
 }

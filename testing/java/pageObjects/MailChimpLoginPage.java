@@ -41,6 +41,16 @@ public class MailChimpLoginPage {
 		createAccountLink.click();
 	}
 
+	public void clicIniciarSesionButton() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	public void clicUsernameTopCornerIcon() {
+		// TODO Auto-generated method stub
+		
+	}
+
 	
 
 }
