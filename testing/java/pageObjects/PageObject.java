@@ -1,24 +1,22 @@
 package pageObjects;
 
 import java.time.Duration;
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.Set;
 
-import org.junit.Before;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 
 public class PageObject {
 
-	protected WebDriver driver;
+	private final static String GOOGLE_CHROME_DRIVER_LOCATION = "Drivers/chromedriver-win64/chromedriver.exe";
 
-	protected CheckYourEmailPage checkYourEmailPage;
-	
-	protected LoginPage loginPage;
-	
+	protected WebDriver driver;
+		
 	protected MailChimpLoginPage mailChimpLoginPage;
 	
-	protected MailChimpMainPage MailChimpMainPage;
+	protected MailChimpMainPage mailChimpMainPage;
 	
 	protected OutlookInboxPage outlookInboxPage;
 	
@@ -27,41 +25,32 @@ public class PageObject {
 	protected OutlookMainPage outlookMainPage;
 	
 	protected SignUpPage signUpPage;
-
-
-	public PageObject() {
+	
+	protected WebDriver openNewBrowser() {
 		
-		System.setProperty("webdriver.chrome.driver", "Drivers/chromedriver-win64/chromedriver.exe");
-
 		driver = new ChromeDriver();
-
-		initPageObjects();
+		
+		maximizeWindow();
+		
+		return driver;
 	}
 	
-	@Before
-	public void setUp() throws Exception {
-
-		driver.manage().window().maximize();
-
-	}
-
-	private void initPageObjects(){
-	    
-	    checkYourEmailPage = new CheckYourEmailPage(driver);
+	
+	protected void initPageObjects(WebDriver driver){
+	    		
+		System.setProperty("webdriver.chrome.driver", GOOGLE_CHROME_DRIVER_LOCATION);
+				
+	    mailChimpLoginPage = new MailChimpLoginPage(driver);
 		
-	    loginPage = new LoginPage (driver);
+	    mailChimpMainPage = new MailChimpMainPage(driver);
 		
-	    mailChimpLoginPage = new MailChimpLoginPage (driver);
+	    outlookInboxPage = new OutlookInboxPage(driver);
 		
-	    MailChimpMainPage = new MailChimpMainPage (driver);
+	    outlookLogInPage = new OutlookLogInPage(driver);
 		
-	    outlookInboxPage = new OutlookInboxPage (driver);
+	    outlookMainPage = new OutlookMainPage(driver);
 		
-	    outlookLogInPage = new OutlookLogInPage (driver);
-		
-	    outlookMainPage = new OutlookMainPage (driver);
-		
-	    signUpPage  = new SignUpPage (driver);
+	    signUpPage  = new SignUpPage(driver);
 	}
 
 
@@ -71,16 +60,44 @@ public class PageObject {
 
 		Iterator<String> iterador = idVentanas.iterator();
 
-		iterador.next(); // Foco 1ra Pestaña
+		iterador.next();
 		
-		driver.switchTo().window(iterador.next()); // Foco 2nd tab
+		driver.switchTo().window(iterador.next());
 
 	}
+	
 	
 	protected void executeImplicitWait() {
 		
 	    driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(30));
-		
 	}
+	
+	protected void maximizeWindow() {
+		
+		driver.manage().window().maximize();
+	}
+	
+	protected void closeBrowser() {
+		
+		driver.quit();
+	}
+	
+	protected void navigateTo(String URL) {
+		
+		driver.get(URL);
+		
+		executeImplicitWait();
+	}
+	
 
+	protected void closeFirstBrowserTab() {
+		ArrayList<String> tabs = new ArrayList<String> (driver.getWindowHandles());
+
+		driver.switchTo().window(tabs.get(0));
+		
+		driver.close();	
+		
+		driver.switchTo().window(tabs.get(1));		
+	}
+	
 }

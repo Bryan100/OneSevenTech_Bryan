@@ -4,8 +4,8 @@ Feature: Create New Account
 
   @TestCase
   Scenario: Fill Sign Up Form
-    ##Given User Navigates to the MailChim WebPage
-    ##And Signs Up a New Account
-    When LogIn to Outlook App
-    ##And Open the Activation Link Email
-    ##And LogIn With the New Confirmed Account
+    Given User Navigates to the MailChim WebPage
+    And Signs Up a New Account
+    And LogIn to Outlook App
+    And Open the Activation Link Email
+    And LogIn With the New Confirmed Account

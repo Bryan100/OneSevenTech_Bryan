@@ -8,32 +8,37 @@ public class MailChimpLoginPage {
 
 	private WebDriver driver;
 
+	
 	public MailChimpLoginPage(WebDriver driver) {
+	
 		this.driver = driver;
+	}
+	
+	public void fillUserName(String username) {
+		
+		WebElement emailField = driver.findElement(By.xpath("//input [@id= 'username']"));
 
-	}
-	
-	public void navigateToMailChimpPage(String URL) {
-		
-		driver.get(URL);
+		emailField.sendKeys(username);
 		
 	}
 	
-	public void closeCookiesPopUp() {
-	
-		WebElement cookiesCloseButton = driver.findElement(By.xpath("//button[@id='onetrust-accept-btn-handler']"));
+	public void fillPassword(String password) {
+		
+		WebElement passwordField = driver.findElement(By.xpath("//input [@id= 'password']"));
 
-		cookiesCloseButton.click();
-	}
-	
-	
-	public void clicAtLoginButton () {
+		passwordField.sendKeys(password);
 		
-		WebElement loginButton = driver.findElement(By.xpath("(//a[contains(@href,'login')])[1]"));
-				
-		loginButton.click();
 	}
 
+	public void clicAtIniciarSesion() {
+		
+      WebElement clickButtonIniciarSesion = driver.findElement(By.xpath("//button [@id= 'submit-btn']"));
+		
+      clickButtonIniciarSesion.click();
+	}
+	
+	
+	
 	public void clicAtCreateAnAccountLink() {
 		
 		WebElement createAccountLink = driver.findElement(By.xpath("//a[@id='create-account-link']"));
@@ -41,16 +46,5 @@ public class MailChimpLoginPage {
 		createAccountLink.click();
 	}
 
-	public void clicIniciarSesionButton() {
-		// TODO Auto-generated method stub
-		
-	}
-
-	public void clicUsernameTopCornerIcon() {
-		// TODO Auto-generated method stub
-		
-	}
-
-	
 
 }

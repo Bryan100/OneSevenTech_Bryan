@@ -1,44 +1,45 @@
 package oneSevenTechTests;
 
-import org.openqa.selenium.chrome.ChromeDriver;
-
+import org.openqa.selenium.WebDriver;
 import io.cucumber.java.After;
 import io.cucumber.java.Before;
+import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.When;
 import pageObjects.PageObject;
 
 public class GherkinsStep extends PageObject {
 
-	public final static String WEB_PAGE_URL = "https://mailchimp.com/es/";
+	public final static String ECOMMERCE_WEB_PAGE_URL = "https://mailchimp.com/es/";
 
-	private String usernameOutlookEmail = "musical_Bryan01@outlook.com";
+	public final static String OUTLOOK_URL = "https://outlook.live.com/mail/0/inbox";
 
-	private String outlookPassword = "1144191672@spotify";
-	
+	private String usernameOutlookEmail = "musical_Bryan01@outlook.com"; // Testing Account - No Personal Information
+
+	private String outlookPassword = "1144191672@spotify"; // Testing Account - No Personal Information
+
 	private String mailchimpPassword = "1144.Musical";
-	
+
 	@Before
 	public void browserSettings() {
 
-		driver.manage().window().maximize();
+		WebDriver driver = openNewBrowser();
 
+		initPageObjects(driver);
 	}
 
-	
 	@Given("^User Navigates to the MailChim WebPage$")
 	public void navigateToMailchimPage() {
 
-		mailChimpLoginPage.navigateToMailChimpPage(WEB_PAGE_URL);
+		navigateTo(ECOMMERCE_WEB_PAGE_URL);
 
-		mailChimpLoginPage.closeCookiesPopUp();
+		mailChimpMainPage.closeCookiesPopUp();
 	}
-	
 
 	@Given("Signs Up a New Account")
 	public void signUpNewAccount() throws InterruptedException {
 
-		mailChimpLoginPage.clicAtLoginButton();
+		mailChimpMainPage.clicAtLoginButton();
 
 		mailChimpLoginPage.clicAtCreateAnAccountLink();
 
@@ -49,86 +50,92 @@ public class GherkinsStep extends PageObject {
 		signUpPage.clicAtHideIconButton();
 
 		signUpPage.clicAtSignUpButton();
-
 	}
 
-	@When("LogIn to Outlook App")
+	@And("LogIn to Outlook App")
 	public void logInToOutlookApp() {
 
-		checkYourEmailPage.clicAtOpenOutlook("https://outlook.live.com/mail/0/inbox");
+		boolean loginSuccessful = false;
 
-		outlookMainPage.clicAtIniciarSesion(); 
-		
-		switchTotheSecondtab();
-		
-		executeImplicitWait();
+		while (!loginSuccessful) {
 
-		outlookLogInPage.fillEmailPhoneField(usernameOutlookEmail);
+			navigateTo(OUTLOOK_URL);
 
-		outlookLogInPage.clicAtNextButton(); // TODO - Henry - - - - - - - - - - - - - - - - - - - - - - - - - - 
+			outlookMainPage.clicAtIniciarSesion();
+			
+			switchTotheSecondtab();
 
-		outlookLogInPage.fillPassword(outlookPassword); // Testing Account - No Personal Information
+			executeImplicitWait();
+			
+			closeFirstBrowserTab();
 
-		outlookLogInPage.clicSignInButton();
+			outlookLogInPage.fillEmailPhoneField(usernameOutlookEmail);
+
+			outlookLogInPage.clicAtNextButton();
+
+			outlookLogInPage.fillPassword(outlookPassword);
+
+			outlookLogInPage.clicSignInButton();
+			
+			executeImplicitWait();
+
+			loginSuccessful = outlookInboxPage.isStayedSignedMessageDisplayed();
+		}
 
 		outlookLogInPage.clicNoButton();
 
 		executeImplicitWait();
 	}
 
-	@When("Open the Activation Link Email")
-	public void openTheActivationLinkEmail() {
 
-										// TODO - Switch Iframe [BRYAN]
-		
-		outlookInboxPage.clicAtInbox(); // Bandeja de Entrada
+	@When("Open the Activation Link Email")
+	public void openTheActivationLinkEmail() throws InterruptedException {
+
+		outlookInboxPage.clicAtInbox();
 
 		outlookInboxPage.clicAtPrioritariosTab();
 
-		outlookInboxPage.clicAtMailchimpClientServices(); // EL PRIMERO
+		outlookInboxPage.clicAtMailchimpClientServices();
 
-		outlookInboxPage.scrollToWeReGladYouReHere(); 
+		outlookInboxPage.scrollToWeReGladYouReHere();
 
 		outlookInboxPage.clicAtActivateAccount();
-
+		
 	}
 
 	@When("LogIn With the New Confirmed Account")
-	public void logInWithTheNewConfirmedAccount() {
-
-		driver.quit();	//Cierra Browser (TODAS las Pestañas)
-
-		driver = new ChromeDriver(); //Abrir Browser
-
-		driver.manage().window().maximize(); 
+	public void logInWithTheNewConfirmedAccount() throws InterruptedException {
 		
-		loginPage.goToMainchampLoginScreen();
+		closeFirstBrowserTab();
 		
-		mailChimpLoginPage.closeCookiesPopUp();
+		navigateTo(ECOMMERCE_WEB_PAGE_URL);
 
-		mailChimpLoginPage.clicIniciarSesionButton();
+		mailChimpMainPage.clicAtLoginButton();
 
-		loginPage.fillUserName(); 
+		executeImplicitWait();
 		
-		loginPage.fillPassword();
+		mailChimpLoginPage.fillUserName(usernameOutlookEmail);
 
-		loginPage.clicAtIniciarSesion();
-		
+		mailChimpLoginPage.fillPassword(mailchimpPassword);
+
+		mailChimpLoginPage.clicAtIniciarSesion();
+
 		executeImplicitWait();
 
-		mailChimpLoginPage.navigateToMailChimpPage(WEB_PAGE_URL);
+		navigateTo(ECOMMERCE_WEB_PAGE_URL);
 
-		mailChimpLoginPage.clicUsernameTopCornerIcon(); // Icono de la Esquina;
+		executeImplicitWait();
 		
+		mailChimpMainPage.clicUsernameTopCornerIcon();
 	}
 
+	
 	@After
-	public void closeBrowser() throws InterruptedException {
+	public void finishTest() throws InterruptedException {
 
-		Thread.sleep(5000); // TODO - Borrar
-
-		driver.quit();
+		Thread.sleep(5000); 
+		
+		closeBrowser();
 	}
-
 
 }
